@@ -265,30 +265,29 @@ float PID_Calculate(PID_t *pid, float measure, float ref)
     pid->Ref = ref;
     pid->Err = pid->Ref - pid->Measure;
 
-//    if (pid->User_Func1_f != NULL)
-//        pid->User_Func1_f(pid);
+   if (pid->User_Func1_f != NULL)
+        pid->User_Func1_f(pid);
 
-//    if (pid->FuzzyRule == NULL)
-//    {
+    if (pid->FuzzyRule == NULL)
+    {
          pid->Pout = pid->Kp * pid->Err;
         pid->ITerm = pid->Ki * pid->Err * pid->dt;
         if (pid->OLS_Order > 2)
             pid->Dout = pid->Kd * OLS_Derivative(&pid->OLS, pid->dt, pid->Err);
         else
             pid->Dout = pid->Kd * (pid->Err - pid->Last_Err) / pid->dt;
-//    }
-//    else
-//    {
-//        pid->Pout = (pid->Kp + pid->FuzzyRule->KpFuzzy) * pid->Err;
-//        pid->ITerm = (pid->Ki + pid->FuzzyRule->KiFuzzy) * pid->Err * pid->dt;
-//        if (pid->OLS_Order > 2)
-//            pid->Dout = (pid->Kd + pid->FuzzyRule->KdFuzzy) * OLS_Derivative(&pid->OLS, pid->dt, pid->Err);
-//        else
-//            pid->Dout = (pid->Kd + pid->FuzzyRule->KdFuzzy) * (pid->Err - pid->Last_Err) / pid->dt;
-//    }
-
-//    if (pid->User_Func2_f != NULL)
-//        pid->User_Func2_f(pid);
+    }
+    else
+    {
+        pid->Pout = (pid->Kp + pid->FuzzyRule->KpFuzzy) * pid->Err;
+        pid->ITerm = (pid->Ki + pid->FuzzyRule->KiFuzzy) * pid->Err * pid->dt;
+        if (pid->OLS_Order > 2)
+            pid->Dout = (pid->Kd + pid->FuzzyRule->KdFuzzy) * OLS_Derivative(&pid->OLS, pid->dt, pid->Err);
+        else
+            pid->Dout = (pid->Kd + pid->FuzzyRule->KdFuzzy) * (pid->Err - pid->Last_Err) / pid->dt;
+    }
+    if (pid->User_Func2_f != NULL)
+        pid->User_Func2_f(pid);
 
     // 梯形积分
     if (pid->Improve & Trapezoid_Intergral)
@@ -296,12 +295,12 @@ float PID_Calculate(PID_t *pid, float measure, float ref)
     // 变速积分
     if (pid->Improve & ChangingIntegrationRate)
         f_Changing_Integration_Rate(pid);
-//    // 微分先行
-//    if (pid->Improve & Derivative_On_Measurement)
-//        f_Derivative_On_Measurement(pid);
-//    // 微分滤波器
-//    if (pid->Improve & DerivativeFilter)
-//        f_Derivative_Filter(pid);
+    // 微分先行
+    if (pid->Improve & Derivative_On_Measurement)
+        f_Derivative_On_Measurement(pid);
+    // 微分滤波器
+    if (pid->Improve & DerivativeFilter)
+        f_Derivative_Filter(pid);
     // 积分限幅
     if (pid->Improve & Integral_Limit)
         f_Integral_Limit(pid);
@@ -310,9 +309,9 @@ float PID_Calculate(PID_t *pid, float measure, float ref)
 
     pid->Output = pid->Pout + pid->Iout + pid->Dout;
 
-//    // 输出滤波
-//    if (pid->Improve & OutputFilter)
-//        f_Output_Filter(pid);
+    // 输出滤波
+    if (pid->Improve & OutputFilter)
+        f_Output_Filter(pid);
 
     // 输出限幅
     f_Output_Limit(pid);

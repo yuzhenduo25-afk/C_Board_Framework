@@ -58,7 +58,7 @@ typedef struct
     Feedforward_t PID_F;
     PID_t PID_P;
     PID_t PID_S;
-	 DM_MOTOR_PV_Typdef PV;
+    DM_MOTOR_PV_Typdef PV;
 	motor_ctrl_t motor_ctrl;
 }DJI_MOTOR_Typedef;
 
