@@ -1,4 +1,5 @@
 #include "Robot.h"
+#include "Chassis_Task.h"
 float monitor_X;
 float monitor_Y;
 float monitor_W;
@@ -24,19 +25,7 @@ void RobotTask(uint8_t mode,
 
         case 1://底盘
         {
-
-        CONTAL->BOTTOM.VX = DBUS->Remote.CH2 *15;
-        CONTAL->BOTTOM.VY = DBUS->Remote.CH3 *15;
-        CONTAL->BOTTOM.VW = DBUS->Remote.CH0 *15;
-
-        float wheel_rpm[4];
-        MecanumResolve(wheel_rpm,CONTAL->BOTTOM.VX,CONTAL->BOTTOM.VY,CONTAL->BOTTOM.VW,&Mecanum_t);
-
-        CONTAL->BOTTOM.wheel1 = wheel_rpm[0];
-        CONTAL->BOTTOM.wheel2 = wheel_rpm[1];
-        CONTAL->BOTTOM.wheel3 = wheel_rpm[2];
-        CONTAL->BOTTOM.wheel4 = wheel_rpm[3];
-
+            Chassis_Task(MOTOR, User_data, Root, CONTAL, DBUS);
         } break;
 
         case 2://云台

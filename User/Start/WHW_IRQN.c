@@ -24,7 +24,7 @@ void StartMoveTask(void const * argument)
 
     for (;;)
     {
-    DJI_Current_Ctrl(&hcan1,0x200,0,0,400,0);
+
     	vTaskDelay (1);
     }
 }
