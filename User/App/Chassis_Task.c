@@ -1,6 +1,6 @@
 #include "Chassis_Task.h"
 #include "All_Init.h"
-
+#include <math.h>
 static mecanumInit_typdef Mecanum_t;
 
 uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
@@ -34,6 +34,10 @@ uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
 
 uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS_Typedef *Root,CONTAL_Typedef *CONTAL,DBUS_Typedef *DBUS)
 {
+    CONTAL->CG.RELATIVE_ANGLE = MOTOR->m_dm4310_y_t.DATA.ralativeAngle;
+    float th = MOTOR->m_dm4310_y_t.DATA.ralativeAngle / 57.3f;
+    float c = cosf(th);
+    float s = sinf(th);
 //电机上电保护
     static uint8_t PID_INIT = RUI_DF_ERROR;
     if (PID_INIT != RUI_DF_ERROR)
@@ -43,10 +47,27 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
         return RUI_DF_ERROR;
     }
 //遥控值转成V
-    CONTAL->BOTTOM.VX = DBUS->Remote.CH2 *15;
-    CONTAL->BOTTOM.VY = DBUS->Remote.CH3 *15;
-    CONTAL->BOTTOM.VW = DBUS->Remote.CH0 *15;
-
+    float vx,vy,vw;
+    vx = DBUS->Remote.CH2 *15;
+    vy = DBUS->Remote.CH3 *15;
+    vw = DBUS->Remote.CH0 *15;
+    switch (DBUS->Remote.S1)
+    {
+        case 1:
+            CONTAL->BOTTOM.VX = vx * c - vy * s;
+            CONTAL->BOTTOM.VY = vx * s + vy * c;
+            CONTAL->BOTTOM.VW = 300;
+            break;
+        case 2:
+            CONTAL->BOTTOM.VX = vx * c - vy * s;
+            CONTAL->BOTTOM.VY = vx * s + vy * c;
+            CONTAL->BOTTOM.VW = RUI_F_CHASSIS_PID(CONTAL->CG.RELATIVE_ANGLE, 1.0f, 0.0f,0.0f);
+            break;
+        default:
+            CONTAL->BOTTOM.VX = vx;
+            CONTAL->BOTTOM.VY = vy;
+            CONTAL->BOTTOM.VW = vw;
+    }
     float wheel_rpm[4];
 //麦轮底盘解算
     MecanumResolve(wheel_rpm,CONTAL->BOTTOM.VX,CONTAL->BOTTOM.VY,CONTAL->BOTTOM.VW,&Mecanum_t);
