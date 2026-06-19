@@ -45,8 +45,14 @@ uint8_t gimbal_task(MOTOR_Typdef *MOTOR, IMU_Data_t *IMU_Data,RUI_ROOT_STATUS_Ty
     pitch_aim += DBUS->Remote.CH3 * 0.1f; // 待调
 //pitch限幅
     pitch_aim = MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,CONTAL->HEAD.Pitch_MIN, pitch_aim);
-//双环PID，外环反馈输入为IMU算出来的yaw/pitch，内环反馈输入为IMU算出来的角加速度。
+//双环PID，外环反馈输入为IMU算出来的yaw/pitch，内环反馈输入为IMU算出来的角加速度
     PID_Calculate(&MOTOR->m_dm4310_y_t.PID_P, MOTOR->m_dm4310_y_t.DATA.ralativeAngle, yaw_aim);
-    PID_Calculate(&MOTOR->m_dm4310_y_t.PID_S, MOTOR->m_dm4310_y_t.DATA.Speed_now, MOTOR->m_dm4310_y_t.PID_P.Output);
+    PID_Calculate(&MOTOR->m_dm4310_y_t.PID_S, IMU_Data->gyro[2], MOTOR->m_dm4310_y_t.PID_P.Output);
+
+    PID_Calculate(&MOTOR->m_dm4310_p_t.PID_P, MOTOR->m_dm4310_p_t.DATA.ralativeAngle, pitch_aim);
+    PID_Calculate(&MOTOR->m_dm4310_p_t.PID_S, IMU_Data->gyro[0], MOTOR->m_dm4310_p_t.PID_P.Output);//IMU_data的轴顺序待调
+
+    DM_Motor_Send(&hcan2,0x00, 0, MOTOR->m_dm4310_y_t.PID_S.Output, 0, 0);
+    DM_Motor_Send(&hcan2,0x00, 0, MOTOR->m_dm4310_p_t.PID_S.Output, 0, 0);//待调
     return RUI_DF_READY;
 }

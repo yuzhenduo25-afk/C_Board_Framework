@@ -52,6 +52,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
     vx = DBUS->Remote.CH2 *15;
     vy = DBUS->Remote.CH3 *15;
     vw = DBUS->Remote.CH0 *15;
+//拨杆s1选择模式，1是小陀螺，2是底盘跟随，3是正常模式
     switch (DBUS->Remote.S1)
     {
         case 1:
@@ -87,7 +88,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
     PID_Calculate(&MOTOR->DJI_3508_Chassis_2.PID_S, (float)MOTOR->DJI_3508_Chassis_2.DATA.Speed_now, MOTOR->DJI_3508_Chassis_2.DATA.Aim );
     PID_Calculate(&MOTOR->DJI_3508_Chassis_3.PID_S, (float)MOTOR->DJI_3508_Chassis_3.DATA.Speed_now, MOTOR->DJI_3508_Chassis_3.DATA.Aim );
     PID_Calculate(&MOTOR->DJI_3508_Chassis_4.PID_S, (float)MOTOR->DJI_3508_Chassis_4.DATA.Speed_now, MOTOR->DJI_3508_Chassis_4.DATA.Aim );
-
+//can发送
     DJI_Current_Ctrl(&hcan1, 0x200,
         (int16_t)MOTOR->DJI_3508_Chassis_1.PID_S.Output,
         (int16_t)MOTOR->DJI_3508_Chassis_2.PID_S.Output,
