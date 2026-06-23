@@ -11,4 +11,7 @@
 #include "WHW_IRQN.h"
 #include "controller.h"
 
+uint8_t MOTOR_HEAD_PID_INIT(MOTOR_Typdef *MOTOR);
+uint8_t gimbal_task(MOTOR_Typdef *MOTOR, IMU_Data_t *IMU_Data, RUI_ROOT_STATUS_Typedef *Root, CONTAL_Typedef *CONTAL, DBUS_Typedef *DBUS);
+
 #endif

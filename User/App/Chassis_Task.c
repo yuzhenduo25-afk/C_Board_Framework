@@ -5,10 +5,10 @@ static mecanumInit_typdef Mecanum_t;
 
 uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
 {
-    float PID_S_1[3] = {   20.0f,   0.0f,   0.0f   };//待调
-    float PID_S_2[3] = {   20.0f,   0.0f,   0.0f   };//待调
-    float PID_S_3[3] = {   20.0f,   0.0f,   0.0f   };//待调
-    float PID_S_4[3] = {   20.0f,   0.0f,   0.0f   };//待调
+    float PID_S_1[3] = {   20.0f,   0.0f,   0.0f   };//TODO 待调
+    float PID_S_2[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
+    float PID_S_3[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
+    float PID_S_4[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
 
     PID_Init(&MOTOR->DJI_3508_Chassis_1.PID_S, 16384.0f, 2000.0f,
              PID_S_1, 0, 0,
@@ -38,10 +38,10 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
     CONTAL->CG.RELATIVE_ANGLE = MOTOR->m_dm4310_y_t.DATA.ralativeAngle;
     float th = MOTOR->m_dm4310_y_t.DATA.ralativeAngle / 57.3f;
     float c = cosf(th);
-    float s = sinf(th);//待调（正负号）
+    float s = sinf(th);//TODO待调（正负号）
 //电机上电保护
     static uint8_t PID_INIT = RUI_DF_ERROR;
-    if (PID_INIT != RUI_DF_ERROR)
+    if (PID_INIT == RUI_DF_ERROR)
     {
         PID_INIT = MOTOR_PID_Chassis_INIT(MOTOR);
         MecanumInit(&Mecanum_t);
@@ -58,7 +58,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
         case 1:
             CONTAL->BOTTOM.VX = vx * c - vy * s;
             CONTAL->BOTTOM.VY = vx * s + vy * c;
-            CONTAL->BOTTOM.VW = 300;//待调
+            CONTAL->BOTTOM.VW = 300;//TODO待调
             break;
         case 2:
             CONTAL->BOTTOM.VX = vx * c - vy * s;
@@ -93,7 +93,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
         (int16_t)MOTOR->DJI_3508_Chassis_1.PID_S.Output,
         (int16_t)MOTOR->DJI_3508_Chassis_2.PID_S.Output,
         (int16_t)MOTOR->DJI_3508_Chassis_3.PID_S.Output,
-        (int16_t)MOTOR->DJI_3508_Chassis_4.PID_S.Output);//stdid待调，&hcan待调
+        (int16_t)MOTOR->DJI_3508_Chassis_4.PID_S.Output);//TODO stdid待调，&hcan待调
 
     return RUI_DF_READY;
 }

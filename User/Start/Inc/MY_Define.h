@@ -43,7 +43,7 @@
 #define RUI_DF_LED_CYAN   5
 #define RUI_DF_LED_WRITE  6
 
-#define INIT_ANGLE 6998
+#define INIT_ANGLE 6998//TODO待调
 
 #define WIPE_MAX_SPEED 7200
 //#define SINGLE_ANGLE -36864

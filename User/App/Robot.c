@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Chassis_Task.h"
+#include "Gimbal_Task.h"
 float monitor_X;
 float monitor_Y;
 float monitor_W;
@@ -30,7 +31,7 @@ void RobotTask(uint8_t mode,
 
         case 2://云台
         {
-
+            gimbal_task(MOTOR, IMU_Data, Root, CONTAL, DBUS);
         } break;
 
         case 3://电容

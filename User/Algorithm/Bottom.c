@@ -8,7 +8,7 @@
  *	@time:				//22-11-25 14:08
  *	@ReadMe:			//
  ************************************************************万能分隔符**************************************************************/
-uint8_t MecanumInit(mecanumInit_typdef *mecanumInitT)
+uint8_t MecanumInit(mecanumInit_typdef *mecanumInitT)//TODO待测
 {
     /*初始化参数*/
     mecanumInitT->deceleration_ratio = 0.052075f; // 减速比1/19
