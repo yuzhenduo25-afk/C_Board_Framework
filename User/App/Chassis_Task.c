@@ -1,3 +1,16 @@
+/*看代码之前先看下面这个视频
+ *https://www.bilibili.com/video/BV1EYJF6JEs9/?spm_id_from=333.1387.favlist.content.click&vd_source=67fed27b3ed008bf7732dc0ffa7217f5
+ *就这样，好不好，讲一个国赛的，小步兵不要听
+ *我是一个英雄，我一级有两百热量上限，我能打两发大弹丸！
+ *我！是一台英雄！
+ *对，你是。台下的观众欣喜若狂。
+ *我能打两颗弹丸！天呐！下面的人狂欢呐！
+ *哦！你好勇敢，你讲出你能打两颗弹丸。
+ *哦，就就就这样，我看到的场景。
+ *他们是操作手，下面一堆观众
+ *弹丸！！！弹丸！！！
+ *  \(^o^)/  \(^o^)/  \(^o^)/
+ */
 #include "Chassis_Task.h"
 #include "All_Init.h"
 #include <math.h>
@@ -5,7 +18,7 @@ static mecanumInit_typdef Mecanum_t;
 
 uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
 {
-    float PID_S_1[3] = {   20.0f,   0.0f,   0.0f   };//TODO 待调
+    float PID_S_1[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
     float PID_S_2[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
     float PID_S_3[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
     float PID_S_4[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
