@@ -8,6 +8,8 @@
 #include "RUI_ROOT_INIT.h"
 #include "Motors.h"
 #include "Power_Ctrl.h"
+#include "board_config.h"
+#include "bord_transmit.h"
 
 uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR);
 uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS_Typedef *Root,CONTAL_Typedef *CONTAL,DBUS_Typedef *DBUS);

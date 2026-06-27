@@ -11,28 +11,54 @@
             }
         },
         {
-            "name": "Debug",
+            "name": "Debug-Gimbal",
             "inherits": "default",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ROBOT_BOARD": "GIMBAL"
             }
         },
         {
-            "name": "Release",
+            "name": "Debug-Chassis",
             "inherits": "default",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "ROBOT_BOARD": "CHASSIS"
+            }
+        },
+        {
+            "name": "Release-Gimbal",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ROBOT_BOARD": "GIMBAL"
+            }
+        },
+        {
+            "name": "Release-Chassis",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "ROBOT_BOARD": "CHASSIS"
             }
         }
     ],
     "buildPresets": [
         {
-            "name": "Debug",
-            "configurePreset": "Debug"
+            "name": "Debug-Gimbal",
+            "configurePreset": "Debug-Gimbal"
         },
         {
-            "name": "Release",
-            "configurePreset": "Release"
+            "name": "Debug-Chassis",
+            "configurePreset": "Debug-Chassis"
+        },
+        {
+            "name": "Release-Gimbal",
+            "configurePreset": "Release-Gimbal"
+        },
+        {
+            "name": "Release-Chassis",
+            "configurePreset": "Release-Chassis"
         }
     ]
 }

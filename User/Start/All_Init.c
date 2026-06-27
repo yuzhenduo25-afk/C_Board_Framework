@@ -1,5 +1,5 @@
 /*看代码之前先看下面这个视频
-*https://www.bilibili.com/video/BV1EYJF6JEs9/?spm_id_from=333.1387.favlist.content.click&vd_source=67fed27b3ed008bf7732dc0ffa7217f5
+ *https://www.bilibili.com/video/BV1EYJF6JEs9/?spm_id_from=333.1387.favlist.content.click&vd_source=67fed27b3ed008bf7732dc0ffa7217f5
  *就这样，好不好，讲一个国赛的，小步兵不要听
  *我是一个英雄，我一级有两百热量上限，我能打两发大弹丸！
  *我！是一台英雄！
@@ -73,6 +73,7 @@ void Everying_Init(void)
 
     //CAN初始化
 	CAN_Filter_Init();
+    BoardCom_Init();
 	
 	//MCP2515初始化
 	flag2 = CANSPI_Initialize(&hspi2);

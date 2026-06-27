@@ -46,7 +46,6 @@ uint8_t gimbal_task(MOTOR_Typdef *MOTOR, IMU_Data_t *IMU_Data,RUI_ROOT_STATUS_Ty
 //pitch限幅(TODO 待填:Pitch_MAX/Pitch_MIN 待调)
     pitch_aim = MATH_Limit_float(CONTAL->HEAD.Pitch_MAX,CONTAL->HEAD.Pitch_MIN, pitch_aim);
 //双环PID，外环反馈输入为IMU算出来的yaw/pitch，内环反馈输入为IMU算出来的角速度
-    //yaw 外环用陀螺仪绝对连续�?YawTotalAngle(世界系锁�?小陀螺关�?,不能用编码器机械�?
     PID_Calculate(&MOTOR->m_dm4310_y_t.PID_P, IMU_Data->YawTotalAngle, yaw_aim);
     PID_Calculate(&MOTOR->m_dm4310_y_t.PID_S, IMU_Data->gyro[2], MOTOR->m_dm4310_y_t.PID_P.Output);// TODO 待填:gyro yaw 先试[2]),上车看转 yaw 时哪个分量最大
 

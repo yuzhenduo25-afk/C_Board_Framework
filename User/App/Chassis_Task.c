@@ -48,8 +48,12 @@ uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
 uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS_Typedef *Root,CONTAL_Typedef *CONTAL,DBUS_Typedef *DBUS)
 {
 //定义一些东西，后面要用
+#if BOARD_IS_CHASSIS
+    CONTAL->CG.RELATIVE_ANGLE = BoardCom_Rx.yaw_relative;
+#else
     CONTAL->CG.RELATIVE_ANGLE = MOTOR->m_dm4310_y_t.DATA.ralativeAngle;
-    float th = MOTOR->m_dm4310_y_t.DATA.ralativeAngle / 57.3f;
+#endif
+    float th = CONTAL->CG.RELATIVE_ANGLE / 57.3f;
     float c = cosf(th);
     float s = sinf(th);//TODO待调（正负号）
 //电机上电保护
@@ -62,11 +66,32 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
     }
 //遥控值转成V
     float vx,vy,vw;
+    uint8_t chassis_mode;
+#if BOARD_IS_CHASSIS
+    if (BoardCom_IsGimbalOnline())
+    {
+        vx = BoardCom_Rx.vx;
+        vy = BoardCom_Rx.vy;
+        vw = BoardCom_Rx.vw;
+        chassis_mode = BoardCom_Rx.mode;
+        CONTAL->BOTTOM.CAP = BoardCom_Rx.cap_enable;
+    }
+    else
+    {
+        vx = 0.0f;
+        vy = 0.0f;
+        vw = 0.0f;
+        chassis_mode = 0;
+        CONTAL->BOTTOM.CAP = 0;
+    }
+#else
     vx = DBUS->Remote.CH2 *15;
     vy = DBUS->Remote.CH3 *15;
     vw = DBUS->Remote.CH0 *15;
+    chassis_mode = DBUS->Remote.S1;
+#endif
 //拨杆s1选择模式，1是小陀螺，2是底盘跟随，3是正常模式
-    switch (DBUS->Remote.S1)
+    switch (chassis_mode)
     {
         case 1:
             CONTAL->BOTTOM.VX = vx * c - vy * s;

@@ -24,10 +24,31 @@ void StartMoveTask(void const * argument)
 
     for (;;)
     {
-        RobotTask(1, &DBUS, &RUI_V_CONTAL, &User_data, &CAPDATE, &VISION_V_DATA,
-                  &RUI_ROOT_STATUS, &ALL_MOTOR, &IMU_Data, &TDDDD, &VT13);
+#if BOARD_IS_GIMBAL
+        BoardCom_OfflineTick();
+
         RobotTask(2, &DBUS, &RUI_V_CONTAL, &User_data, &CAPDATE, &VISION_V_DATA,
                   &RUI_ROOT_STATUS, &ALL_MOTOR, &IMU_Data, &TDDDD, &VT13);
+
+        BoardCom_SendGimbalCmd(&hcan1,
+                               (int16_t)(DBUS.Remote.CH2 * 15),
+                               (int16_t)(DBUS.Remote.CH3 * 15),
+                               (int16_t)(DBUS.Remote.CH0 * 15),
+                               (int16_t)ALL_MOTOR.m_dm4310_y_t.DATA.ralativeAngle,
+                               DBUS.Remote.S1,
+                               RUI_V_CONTAL.BOTTOM.CAP);
+#elif BOARD_IS_CHASSIS
+        BoardCom_OfflineTick();
+
+        RobotTask(1, &DBUS, &RUI_V_CONTAL, &User_data, &CAPDATE, &VISION_V_DATA,
+                  &RUI_ROOT_STATUS, &ALL_MOTOR, &IMU_Data, &TDDDD, &VT13);
+
+        BoardCom_SendChassisFb(&hcan1,
+                               (int16_t)RUI_V_CONTAL.BOTTOM.wheel1,
+                               (int16_t)RUI_V_CONTAL.BOTTOM.wheel2,
+                               (int16_t)RUI_V_CONTAL.BOTTOM.wheel3,
+                               (int16_t)RUI_V_CONTAL.BOTTOM.wheel4);
+#endif
 
     	currentTimeMove += 1;
     	osDelayUntil(currentTimeMove);
@@ -127,6 +148,11 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef* hcan)
 		//CAN1
 		switch (can_rx.StdId)
 		{
+            case BOARD_COM_ID_GIMBAL_CMD:
+            case BOARD_COM_ID_GIMBAL_MODE:
+            case BOARD_COM_ID_CHASSIS_FB:
+                BoardCom_Decode(can_rx.StdId, rx_data);
+                break;
 			case 0x201:
 				MOTOR_CAN_RX_3508RM(&ALL_MOTOR.DJI_3508_Chassis_1.DATA, rx_data);
 				break;

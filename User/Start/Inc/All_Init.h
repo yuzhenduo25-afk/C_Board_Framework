@@ -35,6 +35,8 @@
 #include "VT13.h"
 #include "mahony_filter.h"
 #include "VOFA.h"
+#include "board_config.h"
+#include "bord_transmit.h"
 
 void Everying_Init(void);
 extern uint8_t VT13_RX_DATA[21];
