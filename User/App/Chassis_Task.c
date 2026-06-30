@@ -18,6 +18,7 @@ static mecanumInit_typdef Mecanum_t;
 
 uint8_t MOTOR_PID_Chassis_INIT(MOTOR_Typdef *MOTOR)
 {
+    // TODO 上车调参: 四个底盘 3508 速度环 PID，先单轮悬空调，再整体落地调
     float PID_S_1[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
     float PID_S_2[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
     float PID_S_3[3] = {   20.0f,   0.0f,   0.0f   };//TODO待调
@@ -55,8 +56,9 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
 #endif
     float th = CONTAL->CG.RELATIVE_ANGLE / 57.3f;
     float c = cosf(th);
+    // TODO 上车调参: 底盘跟随/小陀螺坐标变换方向，车头方向不对时优先检查 s 的正负号
     float s = sinf(th);//TODO待调（正负号）
-//电机上电保护
+//电机上电PID初始化一次
     static uint8_t PID_INIT = RUI_DF_ERROR;
     if (PID_INIT == RUI_DF_ERROR)
     {
@@ -85,6 +87,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
         CONTAL->BOTTOM.CAP = 0;
     }
 #else
+    // TODO 上车调参: 单板本地模式摇杆比例，太慢加大 15，太冲减小
     vx = DBUS->Remote.CH2 *15;
     vy = DBUS->Remote.CH3 *15;
     vw = DBUS->Remote.CH0 *15;
@@ -96,11 +99,13 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
         case 1:
             CONTAL->BOTTOM.VX = vx * c - vy * s;
             CONTAL->BOTTOM.VY = vx * s + vy * c;
+            // TODO 上车调参: 小陀螺固定旋转速度
             CONTAL->BOTTOM.VW = 300;//TODO待调
             break;
         case 2:
             CONTAL->BOTTOM.VX = vx * c - vy * s;
             CONTAL->BOTTOM.VY = vx * s + vy * c;
+            // TODO 上车调参: 底盘跟随云台角度 PID 参数，跟随慢加 P，来回摆减 P/加 D
             CONTAL->BOTTOM.VW = RUI_F_CHASSIS_PID(CONTAL->CG.RELATIVE_ANGLE, 1.0f, 0.0f,0.0f);
             break;
         default:
@@ -127,6 +132,7 @@ uint8_t Chassis_Task(MOTOR_Typdef *MOTOR, User_Data_T *User_data,RUI_ROOT_STATUS
     PID_Calculate(&MOTOR->DJI_3508_Chassis_3.PID_S, (float)MOTOR->DJI_3508_Chassis_3.DATA.Speed_now, MOTOR->DJI_3508_Chassis_3.DATA.Aim );
     PID_Calculate(&MOTOR->DJI_3508_Chassis_4.PID_S, (float)MOTOR->DJI_3508_Chassis_4.DATA.Speed_now, MOTOR->DJI_3508_Chassis_4.DATA.Aim );
 //can发送
+    // TODO 上车调参: 确认底盘 3508 使用 hcan1、0x200 控制帧，轮序不对查电机 ID/接线/符号
     DJI_Current_Ctrl(&hcan1, 0x200,
         (int16_t)MOTOR->DJI_3508_Chassis_1.PID_S.Output,
         (int16_t)MOTOR->DJI_3508_Chassis_2.PID_S.Output,

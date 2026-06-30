@@ -43,6 +43,7 @@
 #define RUI_DF_LED_CYAN   5
 #define RUI_DF_LED_WRITE  6
 
+// TODO 上车调参: 云台 yaw 电机机械中位编码器值，先机械对中再记录
 #define INIT_ANGLE 6998//TODO待调
 
 #define WIPE_MAX_SPEED 7200
@@ -65,6 +66,7 @@
 //电容离线检测时间
 #define RUI_DF_CAP_OFFLINE_TIME 30
 
+// TODO 上车调参: IMU 恒温 PID 和输出限幅，温度到不了加大输出，温度波动大减小 P/I
 #define TEMPERATURE_PID {   1600.0f,    0.02f,  5.0f    }
 #define TEMPERATURE_PID_MAX_OUT 4500.0f  //max out of temperature control PID
 #define TEMPERATURE_PID_MAX_IOUT 600.0f //max iout of temperature control PID
@@ -137,6 +139,7 @@
 #define LIFTED_DEBUG 0
 
 // 云台限度
+// TODO 上车调参: pitch 上下机械限位，必须留安全余量
 #define GIMBAL_PIT_MAX 35 //-100
 #define GIMBAL_PIT_MIN -17  //300
 #define OMNI_PIT_MAX 5200

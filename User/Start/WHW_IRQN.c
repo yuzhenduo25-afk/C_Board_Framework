@@ -30,6 +30,8 @@ void StartMoveTask(void const * argument)
         RobotTask(2, &DBUS, &RUI_V_CONTAL, &User_data, &CAPDATE, &VISION_V_DATA,
                   &RUI_ROOT_STATUS, &ALL_MOTOR, &IMU_Data, &TDDDD, &VT13);
 
+        // TODO 上车调参: 云台板发给底盘的 vx/vy/vw 摇杆比例，太慢加大 15，太冲减小
+        // TODO 上车调参: yaw_relative 是云台相对底盘角度，底盘跟随方向反时检查这个值的正负
         BoardCom_SendGimbalCmd(&hcan1,
                                (int16_t)(DBUS.Remote.CH2 * 15),
                                (int16_t)(DBUS.Remote.CH3 * 15),

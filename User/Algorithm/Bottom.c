@@ -11,6 +11,9 @@
 uint8_t MecanumInit(mecanumInit_typdef *mecanumInitT)//TODO待测
 {
     /*初始化参数*/
+    // TODO 上车调参: 底盘机械参数，按实车测量减速比、轮距、轴距、轮周长
+    // TODO 上车调参: max_wheel_ramp 是 3508 轮速限幅，过大易打滑/过流，过小车速受限
+    // TODO 上车调参: rotate_x/y_offset 是云台相对底盘中心偏移，影响小陀螺旋转中心
     mecanumInitT->deceleration_ratio = 0.052075f; // 减速比1/19
     mecanumInitT->max_vw_speed       = 50000;     // r方向上的最大速度单位：毫米/秒
     mecanumInitT->max_vx_speed       = 50000;     // x方向上的最大速度单位：毫米/秒
